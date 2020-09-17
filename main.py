@@ -24,7 +24,10 @@ opt.add_experimental_option("prefs", { \
 dayname = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 timetable = {"Monday": ['MIT', 'IS', 'AIML', 'DAA', 'CN'], "Tuesday": ['IS', 'AIML', 'DAA', 'CN', 'AIML'],
              "Wednesday": ['AIML', 'DAA', 'CN', 'MIT'], "Thursday": ['DAA', 'CN', 'MIT', 'ST', 'ST'],
-             "Friday": ['CN', 'MIT', 'IS', 'AIML', 'DAA']}
+             "Friday": ['CN', 'MIT', 'IS', 'AIML', 'ST'], "Sunday":['DAA','CN','AIML','ST','CN']}
+links = {"CN":"https://meet.google.com/lookup/drusihimug?authuser=0&hs=179","MIT":"https://meet.google.com/lookup/f3lq6ew2w3?authuser=0&hs=179"
+            ,"DAA":"https://meet.google.com/lookup/fwp4lmwyav?authuser=0&hs=179","ST":"https://meet.google.com/lookup/hblv2osohr?authuser=0&hs=179",
+         "AIML":"https://meet.google.com/lookup/gnvv4nv5ay?authuser=0&hs=179","IS":"https://meet.google.com/lookup/flvtihrhc6?authuser=0&hs=179"}
 # print(timetable['Friday'])
 path = "C:\Program Files (x86)\chromedriver.exe"
 classroomlink = "https://accounts.google.com/signin/v2/identifier?service=classroom&passive=1209600&continue=https%3A%2F%2Fclassroom.google.com%2Fu%2F0%2Fh&followup=https%3A%2F%2Fclassroom.google.com%2Fu%2F0%2Fh&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
@@ -73,175 +76,57 @@ class Bot():
     def quit(self):
         self.driver.quit()
 
-
-def CN():
-    # CN = driver.find_element_by_xpath('//*[@id="yDmH0d"]/div[2]/div/div[2]/div/ol/li[6]/div[1]/div[3]/h2/a[1]')
-    # CN = WebDriverWait(driver,15).until(EC.presence_of_element_located(By.XPATH, '//*[@id="yDmH0d"]/div[2]/div[2]/div[1]/div/div[2]/div[2]'))
-    # CN.click()
-    # sleep(3)
+def driver(subject,mins):
     global starttime
-    starttime = dt.now() + timedelta(minutes=59)
-    print(dt.now())
-    print(starttime)
-    bot = Bot()
-    bot.login()
-    link = "https://meet.google.com/lookup/drusihimug?authuser=0&hs=179"
-    bot.attend(link)
-    while dt.now() <= starttime:
-        time.sleep(1)
-    bot.quit()
-    main()
-
-
-def DAA():
-    # driver.get("https://meet.google.com/lookup/fwp4lmwyav?authuser=0&hs=179")
-    starttime = dt.now() + timedelta(minutes=59)
-    link = "https://meet.google.com/lookup/fwp4lmwyav?authuser=0&hs=179"
+    starttime = dt.now() + timedelta(minutes=mins)
+    link = links[subject]
+    #print(dt.now())
+    #print(starttime)
     bot = Bot()
     bot.login()
     bot.attend(link)
     while dt.now() <= starttime:
         time.sleep(1)
+    print(f"Successfully attened {subject}  ")
     bot.quit()
-    main()
 
-
-def ST():
-    link = "https://meet.google.com/lookup/hblv2osohr?authuser=0&hs=179"
-    starttime = dt.now() + timedelta(minutes=59)
-    bot = Bot()
-    bot.login()
-    bot.attend(link)
-    while dt.now() <= starttime:
-        time.sleep(1)
-    bot.quit()
-    main()
-
-
-def MIT():
-    link = "https://meet.google.com/lookup/f3lq6ew2w3?authuser=0&hs=179"
-    starttime = dt.now() + timedelta(minutes=59)
-    bot = Bot()
-    bot.login()
-    bot.attend(link)
-    while dt.now() <= starttime:
-        time.sleep(1)
-    bot.quit()
-    main()
-
-
-def AIML():
-    link = "https://meet.google.com/lookup/gnvv4nv5ay?authuser=0&hs=179"
-    starttime = dt.now() + timedelta(minutes=59)
-    bot = Bot()
-    bot.login()
-    bot.attend(link)
-    while dt.now() <= starttime:
-        time.sleep(1)
-    bot.quit()
-    main()
-
-
-def IS():
-    link = "https://meet.google.com/lookup/flvtihrhc6?authuser=0&hs=179"
-    starttime = dt.now() + timedelta(minutes=59)
-    bot = Bot()
-    bot.login()
-    bot.attend(link)
-    while dt.now() <= starttime:
-        time.sleep(1)
-    bot.quit()
-    main()
-
+    #main()
 
 def main():
+    print(dt.now())
+    daynum = dt.now().weekday()
+    day = dayname[daynum]
+    mins = 59
     while True:
-        if dt(dt.now().year, dt.now().month, dt.now().day, 8, 30) <= dt.now() < dt(dt.now().year, dt.now().month,
-                                                                                   dt.now().day, 9, 28):
-            daynum = dt.now().weekday()
-            day = dayname[daynum]
+        if dt(dt.now().year, dt.now().month, dt.now().day,8,30) <= dt.now() < dt(dt.now().year, dt.now().month,
+                                                                                   dt.now().day, 9,29):
+            #subject = timetable[day][0]
             subject = timetable[day][0]
-            if subject == 'CN':
-                CN()
-            elif subject == 'AIML':
-                AIML()
-            elif subject == 'MIT':
-                MIT()
-            elif subject == 'DAA':
-                DAA()
-            elif subject == 'ST':
-                ST()
-            elif subject == 'IS':
-                IS()
-        elif dt(dt.now().year, dt.now().month, dt.now().day, 9, 29) <= dt.now() < dt(dt.now().year, dt.now().month,
-                                                                                     dt.now().day, 10, 28):
-            daynum = dt.now().weekday()
-            day = dayname[daynum]
-            subject = timetable[day][1]
-            if subject == 'CN':
-                CN()
-            elif subject == 'AIML':
-                AIML()
-            elif subject == 'MIT':
-                MIT()
-            elif subject == 'DAA':
-                DAA()
-            elif subject == 'ST':
-                ST()
-            elif subject == 'IS':
-                IS()
-        elif dt(dt.now().year, dt.now().month, dt.now().day, 10, 29) <= dt.now() < dt(dt.now().year, dt.now().month,
-                                                                                      dt.now().day, 11, 28):
-            daynum = dt.now().weekday()
-            day = dayname[daynum]
-            subject = timetable[day][2]
-            if subject == 'CN':
-                CN()
-            elif subject == 'AIML':
-                AIML()
-            elif subject == 'MIT':
-                MIT()
-            elif subject == 'DAA':
-                DAA()
-            elif subject == 'ST':
-                ST()
-            elif subject == 'IS':
-                IS()
-        elif dt(dt.now().year, dt.now().month, dt.now().day, 11, 29) <= dt.now() < dt(dt.now().year, dt.now().month,
-                                                                                      dt.now().day, 12, 30):
-            daynum = dt.now().weekday()
-            day = dayname[daynum]
-            subject = timetable[day][3]
-            if subject == 'CN':
-                CN()
-            elif subject == 'AIML':
-                AIML()
-            elif subject == 'MIT':
-                MIT()
-            elif subject == 'DAA':
-                DAA()
-            elif subject == 'ST':
-                ST()
-            elif subject == 'IS':
-                IS()
-        elif dt(dt.now().year, dt.now().month, dt.now().day, 21, 20) < dt.now() < dt(dt.now().year, dt.now().month,
-                                                                                     dt.now().day, 22):
-            daynum = dt.now().weekday()
-            day = dayname[daynum]
-            subject = timetable[day][4]
-            if subject == 'CN':
-                CN()
-            elif subject == 'AIML':
-                AIML()
-            elif subject == 'MIT':
-                MIT()
-            elif subject == 'DAA':
-                DAA()
-            elif subject == 'ST':
-                ST()
-            elif subject == 'IS':
-                IS()
+            driver(subject,mins)
+        elif dt(dt.now().year, dt.now().month, dt.now().day, 9,29) <= dt.now() < dt(dt.now().year, dt.now().month,
+                                                                                     dt.now().day, 10,28):
 
+            #subject = timetable[day][1]
+            subject = timetable[day][1]
+            driver(subject,mins)
+        elif dt(dt.now().year, dt.now().month, dt.now().day, 10,28) <= dt.now() < dt(dt.now().year, dt.now().month,
+                                                                                      dt.now().day, 11,27):
+            subject = timetable[day][2]
+            driver(subject,mins)
+
+        elif dt(dt.now().year, dt.now().month, dt.now().day, 11,27) <= dt.now() < dt(dt.now().year, dt.now().month,
+                                                                                      dt.now().day, 12,26):
+
+            subject = timetable[day][3]
+            driver(subject, mins)
+        elif dt(dt.now().year, dt.now().month, dt.now().day,16) <= dt.now() < dt(dt.now().year, dt.now().month,
+                                                                                     dt.now().day,17,50):
+
+            try:
+                subject = timetable[day][4]
+                driver(subject,111)
+            except:
+                break
 
 if __name__ == "__main__":
     print("Hello from the Bot!")
